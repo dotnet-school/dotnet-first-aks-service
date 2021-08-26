@@ -108,7 +108,7 @@ dotnet run --project HelloWorldService/HelloWorldService.csproj
 
 
 
-Now open url https://localhost:5001/WeatherForecast in browser to ensure our service is up and running.
+Now open url http://localhost:5000/WeatherForecast in browser to ensure our service is up and running.
 
 
 
@@ -122,7 +122,7 @@ A dockerfile describes how to run a program as a docker container.
 
 Create a file `dotnet-first-aks-service/HelloWorldService/Dockerfile` as follows : 
 
-```
+```dockerfile
 # HelloWorldService/Dockerfile
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
@@ -147,7 +147,7 @@ ENTRYPOINT ["dotnet", "HelloWorldService.dll"]
 
 Create another file `dotnet-first-aks-service/HelloWorldService/.dockerignore` as follows : 
 
-```
+```powershell
 **/.dockerignore
 **/.project
 **/.vs
@@ -161,6 +161,17 @@ Create another file `dotnet-first-aks-service/HelloWorldService/.dockerignore` a
 
 
 
+Build and run you docker file
+
+```bash
+# Create docker image
+docker build -t hello-world-service .
+
+# Run service as a Docker container
+docker run -p 5000:80 hello-world-service
+```
 
 
-http://localhost:5000/WeatherForecast 
+
+Now open url http://localhost:5000/WeatherForecast  in browser to ensure our service is running as a docker container.
+
