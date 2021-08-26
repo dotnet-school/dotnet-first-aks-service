@@ -247,5 +247,6 @@ Iframe
 
   
   
- Github raw url
-  https://github.com/dotnet-school/dotnet-first-aks-service/raw/master/docs/videos/make-docker-image-public.mov
+Github raw url
+
+https://github.com/dotnet-school/dotnet-first-aks-service/raw/master/docs/videos/make-docker-image-public.mov
