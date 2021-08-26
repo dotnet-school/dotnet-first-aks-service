@@ -65,7 +65,11 @@ In this article we focus on just creating a simple web service. There is another
 
 - [***Create your service***](#create-first-service)
 
-  > Use .NET boilerplate to create a service. 
+  > Use `dotnet5` boilerplate to create a service. 
+  
+- ***[Create a Dockerfile](#run-as-docker-container)***
+
+  > Create a `Dockerfile` for your service
 
 
 
@@ -80,6 +84,8 @@ You can create the service using visual studio. Please ensure you keep the folde
 - <repository>
   - HelloWorldService
     - HelloWorldService.csproj
+    
+    
 
 For this article we will use the CLI to create a new service.
 
@@ -104,3 +110,57 @@ dotnet run --project HelloWorldService/HelloWorldService.csproj
 
 Now open url https://localhost:5001/WeatherForecast in browser to ensure our service is up and running.
 
+
+
+<a name="run-as-docker-container"></a>
+
+### Create a Dockerfile
+
+In Kubernetes world (or cloud native world in general) everything runs as a container. Be it the database, messaging broker, in-memory caches e.t.c.
+
+A dockerfile describes how to run a program as a docker container.
+
+Create a file `dotnet-first-aks-service/HelloWorldService/Dockerfile` as follows : 
+
+```
+# HelloWorldService/Dockerfile
+
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+WORKDIR /source
+
+COPY ./*.csproj .
+RUN dotnet restore
+
+COPY . .
+RUN dotnet publish -c release -o /app --no-restore
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+WORKDIR /app
+
+COPY --from=build /app .
+
+EXPOSE 80  
+ENTRYPOINT ["dotnet", "HelloWorldService.dll"]
+```
+
+
+
+Create another file `dotnet-first-aks-service/HelloWorldService/.dockerignore` as follows : 
+
+```
+**/.dockerignore
+**/.project
+**/.vs
+**/.idea
+**/.vscode
+**/*.*proj.user
+**/bin
+**/Dockerfile*
+**/obj
+```
+
+
+
+
+
+http://localhost:5000/WeatherForecast 
