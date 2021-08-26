@@ -245,3 +245,7 @@ Iframe
 
 <video width="320" height="240" controls>   <source src="docs/videos/make-docker-image-public.mov" type="video/mp4">   <source src="docs/videos/make-docker-image-public.mov" type="video/ogg"> Your browser does not support the video tag. </video>
 
+  
+  
+ Github raw url
+  https://github.com/dotnet-school/dotnet-first-aks-service/raw/master/docs/videos/make-docker-image-public.mov
