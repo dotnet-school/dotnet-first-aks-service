@@ -5,7 +5,7 @@
 - `kubectl apply` should be used for applications that do not update frequently
 - `kubectl set image` is better for CI/CD
 
-![image-20201103214629141](/Users/dawn/projects/project_2020/kubernetes/images/deployments-overview.png)
+![image-20201103214629141](images/deployments-overview.png)
 
 
 
@@ -55,7 +55,7 @@ spec:
 - kubelet on nodes detect pods being assigned to them
 - kubelet downloads images and runs pods
 
-![image-20201103215340296](/Users/dawn/projects/project_2020/kubernetes/images/deployment-creation.png)
+![image-20201103215340296](./images/deployment-creation.png)
 
 
 
@@ -105,7 +105,7 @@ spec:
 
 After running a deployment, do a describe. The last lines of events will look like 
 
-![image-20201103233646779](/Users/dawn/projects/project_2020/kubernetes/images/deployment-evets.png)
+![image-20201103233646779](./images/deployment-evets.png)
 
 It gradually decreases the size or replicaset of last deployment, and keeps increasing pods in current. Till current is at replica count and previous is 0.
 
