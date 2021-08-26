@@ -1,7 +1,13 @@
 ### TODO
 
-- [ ] Create a service
+- [x] Create a service
+- [x] Dockerize service
+- [ ] 
+- [ ] Publish image to docker registry
 - [ ] Create a kubernetes manifest
+- [ ] Help on creating accounts
+  - [ ] Instructions to create docker hub account
+  - [ ] Instructions on creating azure account
 - [ ] Create sub document to explain in details
   - [ ] creating a docker file
   - [ ] docker registry
@@ -70,6 +76,10 @@ In this article we focus on just creating a simple web service. There is another
 - ***[Create a Dockerfile](#run-as-docker-container)***
 
   > Create a `Dockerfile` for your service
+
+- ***[Publish Service on Docker Registry](#publish-to-docker-registry )***
+
+  > Publish the image on docker registry so that it can be downloaded inside Azure Kubertes cluster.
 
 
 
@@ -164,6 +174,9 @@ Create another file `dotnet-first-aks-service/HelloWorldService/.dockerignore` a
 Build and run you docker file
 
 ```bash
+# To to folder containing the Dockerfile
+cd HelloWorldService
+ 
 # Create docker image
 docker build -t hello-world-service .
 
@@ -171,7 +184,64 @@ docker build -t hello-world-service .
 docker run -p 5000:80 hello-world-service
 ```
 
-
-
 Now open url http://localhost:5000/WeatherForecast  in browser to ensure our service is running as a docker container.
+
+
+
+<a name="publish-to-docker-registry"></a>
+
+### Publish Service on Docker Registry
+
+```bash
+# Log into you docker account
+docker login
+
+# Create you image name on docker registry
+docker tag hello-world-service <your-docker-hub-username>/hello-world-service:v1
+
+# e.g.
+# docker tag hello-world-service nishants/hello-world-service:v1
+
+# Push your image to docker registry
+docker push <your-docker-hub-username>/hello-world-service:v1
+
+# outptu : 
+# The push refers to repository [docker.io/<your-docker-hub-username>/hello-world-service]
+```
+
+
+
+
+
+<your-docker-hub-username>
+
+By default, the image is marked as private. We don't want to setup authentication in AKS. So, to keep it simple, we will marke the image as public, available for anyone to use.
+
+![image-20210826140351294](docs/images/docker-hub-private-repo.png)
+
+
+
+**Steps to make your image public:** 
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/isYt_kGNjIY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+
+https://user-images.githubusercontent.com/58986949/115314310-805b2780-a1a7-11eb-8558-648a367ea231.mp4
+
+./docs/videos/make-docker-image-public.mov
+
+[video](./docs/videos/make-docker-image-public.mov)
+
+
+
+docs/videos/make-docker-image-public.mov
+
+[video](docs/videos/make-docker-image-public.mov)
+
+
+
+Iframe
+
+<video width="320" height="240" controls>   <source src="docs/videos/make-docker-image-public.mov" type="video/mp4">   <source src="docs/videos/make-docker-image-public.mov" type="video/ogg"> Your browser does not support the video tag. </video>
 
