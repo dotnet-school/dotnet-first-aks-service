@@ -223,35 +223,5 @@ By default, the image is marked as private. We don't want to setup authenticatio
 
 **Steps to make your image public:** 
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/isYt_kGNjIY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<img src="docs/images/make-docker-image-public.gif" alt="image-20210826140351294" style="zoom:150%;" />
 
-
-
-https://user-images.githubusercontent.com/58986949/115314310-805b2780-a1a7-11eb-8558-648a367ea231.mp4
-
-./docs/videos/make-docker-image-public.mov
-
-[video](./docs/videos/make-docker-image-public.mov)
-
-
-
-docs/videos/make-docker-image-public.mov
-
-[video](docs/videos/make-docker-image-public.mov)
-
-
-
-Iframe
-
-<video width="320" height="240" controls>   <source src="docs/videos/make-docker-image-public.mov" type="video/mp4">   <source src="docs/videos/make-docker-image-public.mov" type="video/ogg"> Your browser does not support the video tag. </video>
-
-  
-  
-Github raw url
-
-https://github.com/dotnet-school/dotnet-first-aks-service/raw/master/docs/videos/make-docker-image-public.mov
-  
-  
-  
-  
-https://nishants.in/public-website-external/make-docker-image-public.mp4
