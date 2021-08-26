@@ -221,7 +221,7 @@ docker run -p 5000:80 hello-world-service
 
 Now open url http://localhost:5000/WeatherForecast  in browser to ensure our service is running as a docker container.
 
-[Read more about docker here](./docs/Docker)
+[Read more about docker here](./docs/Docker.md)
 
 <a name="publish-to-docker-registry"></a>
 
@@ -351,5 +351,13 @@ kubectl apply -f Kubernetes/
 kubectl get service/hello-world-service
 # NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     
 # hello-world-service   LoadBalancer   10.0.105.141   51.105.150.87   
+```
+
+
+
+Remember to delete your Azure resources when you are done
+
+```bash
+az group delete --name $RESOURCE_GROUP --yes --no-wait
 ```
 
