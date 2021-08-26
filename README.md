@@ -217,7 +217,7 @@ docker push <your-docker-hub-username>/hello-world-service:v1
 
 By default, the image is marked as private. We don't want to setup authentication in AKS. So, to keep it simple, we will marke the image as public, available for anyone to use.
 
-![image-20210826140351294](docs/images/docker-hub-private-repo.png)
+![image-20210826140351294](docs/images/docker-hub-private-repo_.png)
 
 
 
