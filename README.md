@@ -221,7 +221,7 @@ docker run -p 5000:80 hello-world-service
 
 Now open url http://localhost:5000/WeatherForecast  in browser to ensure our service is running as a docker container.
 
-[Read more about docker here](./docs/Docker.md)
+[Read more ](./docs/Docker.md)
 
 <a name="publish-to-docker-registry"></a>
 
@@ -310,7 +310,7 @@ spec:
           imagePullPolicy: Always
 ```
 
-
+[Read more ](./docs/Kubernetes.md)
 
 <a name="deploy-to-aks"></a>
 
