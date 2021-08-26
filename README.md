@@ -3,9 +3,9 @@
 - [x] Create a service
 - [x] Dockerize service
 - [x] Publish image to docker registry
+- [x] Create a kubernetes manifest
 - [ ] Change tone from you to we
-- [ ] Create a kubernetes manifest
-- [ ] Create script in poweshell 
+- [x] ~~Create script in poweshell~~
 - [ ] Help on creating accounts
   - [ ] Instructions to create docker hub account
   - [ ] Instructions on creating azure account
@@ -94,7 +94,7 @@ In this article we focus on just creating a simple web service. There is another
 
  
 
-### Steps
+# Steps
 
 - [***Create your service***](#create-first-service)
 
@@ -221,7 +221,7 @@ docker run -p 5000:80 hello-world-service
 
 Now open url http://localhost:5000/WeatherForecast  in browser to ensure our service is running as a docker container.
 
-
+[Read more about docker here](./docs/Docker)
 
 <a name="publish-to-docker-registry"></a>
 
