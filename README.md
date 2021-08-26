@@ -3,6 +3,7 @@
 - [x] Create a service
 - [x] Dockerize service
 - [x] Publish image to docker registry
+- [ ] Change tone from you to we
 - [ ] Create a kubernetes manifest
 - [ ] Create script in poweshell 
 - [ ] Help on creating accounts
@@ -21,6 +22,7 @@
       - [ ] ingress
     - [ ] Deployment
     - [ ] Load balancer
+    - [ ] Replica controller
   - [ ] Docker registry
     - [ ] what is a registry
     - [ ] why we need it 
@@ -34,19 +36,21 @@
 
 # Your first DotNet Service on AKS
 
-This article will help you setup your first service on AKS. It does not intend to provide an in-depth knowledge on the tech-stack. Idea is, that once you have it working you can play around, experiment, eplore and enhance to learn the concepts in depth or to create a prototype.
+This article will help you setup your first service on AKS. It does not intend to provide an in-depth knowledge on the tech-stack. Idea is, that once you have it working you can play around, experiment, explore and enhance to learn the concepts in depth or to create a prototype.
 
+We will create a simple service and talk about basics of docker and kubernetes. You need ***no prior experience with Docker/Kubernetes or Azure for this.***
 
-
-We will create a simple service and talk about basics of docker and kubernetes. You need no prior experience with Docker/Kubernetes or Azure for this.
-
-
-
-In this article we focus on just creating a simple web service. There is another article that demonstrates creating a streaming server with gRPC and Websockets here https://github.com/dotnet-school/dotnet-streaming-aks.
+In this article we focus on just creating a simple web service. There is another article that demonstrates creating a streaming server with gRPC and websockets here https://github.com/dotnet-school/dotnet-streaming-aks.
 
 
 
 ### Pre-requisite
+
+- **Development environment**
+
+  > If you are using you office laptop, you can have problems because of firewall and network policies.
+  >
+  > It is recommended that you use your personal machine so that you can freely communicate with docker hub and azure.
 
 - **.NET 5 SDK**
 
@@ -78,11 +82,17 @@ In this article we focus on just creating a simple web service. There is another
 
 - **Azure CLI**
 
-  > To be able to connect to azure via cli. You can skip this and use Azure cloud shell instead. But is recommended to help you follow along the steps in this article.
+  > To be able to connect to Azure via cli. You can skip this and use Azure cloud shell instead. But is recommended to help you follow along the steps in this article.
   >
   > Download and install from https://docs.microsoft.com/en-us/cli/azure/install-azure-cli
+  
+- **CLI**
 
+  > Commands in this arcticle are created for bash. You can use most command in a poweshell. Its recommended to use something like `wsl` or `git bash` if you are running on windows.
+  >
+  > Download and install gitbash (if required) from : https://git-scm.com/downloads
 
+ 
 
 ### Steps
 
@@ -100,13 +110,19 @@ In this article we focus on just creating a simple web service. There is another
   
 - ***[Create Kubernetes Manifest](#create-kubernetes-manifest)***
 
+  > Create a `.yaml` file to define how to run service in a kubenetes cluster
+
+- ***[Deploy to AKS](#deploy-to-aks)***
+
+  > Create a cluster on AKS, and use our manifest file with kubectl to deploy our serivce to Azure Kubernetes Service.
+
 
 
 
 
 <a name="create-first-service"></a>
 
-### Create a service with .net5
+# Create a service
 
 You can create the service using visual studio. Please ensure you keep the folder strucutre as below : 
 
@@ -143,7 +159,7 @@ Now open url http://localhost:5000/WeatherForecast in browser to ensure our serv
 
 <a name="run-as-docker-container"></a>
 
-### Create a Dockerfile
+# Create a Dockerfile
 
 In Kubernetes world (or cloud native world in general) everything runs as a container. Be it the database, messaging broker, in-memory caches e.t.c.
 
@@ -209,7 +225,7 @@ Now open url http://localhost:5000/WeatherForecast  in browser to ensure our ser
 
 <a name="publish-to-docker-registry"></a>
 
-### Publish Service on Docker Registry
+# Publish Service on Docker Registry
 
 ```bash
 # Log into you docker account
@@ -295,4 +311,45 @@ spec:
 ```
 
 
+
+<a name="deploy-to-aks"></a>
+
+# Deploy to Auzure Kubernetes Service
+
+```bash
+# login using azure cli
+az login
+
+RESOURCE_GROUP=dotnet-first-aks-service
+CLUSTER_NAME=dotnet-first-aks-service-cluster
+REGION=westeurope
+
+  # Create resource
+az group create --name $RESOURCE_GROUP --location $REGION
+
+  # Create cluster on AKS with 1 node
+az aks create --resource-group $RESOURCE_GROUP \
+--name $CLUSTER_NAME \
+--node-count 1 \
+--enable-addons monitoring \
+--generate-ssh-keys
+
+  # Allow kubectl to connect and manage our AKS clustuer
+az aks get-credentials \
+--resource-group $RESOURCE_GROUP \
+--name $CLUSTER_NAME
+
+  # Check if our node is up and running
+kubectl get nodes
+  # NAME                                STATUS   ROLES   AGE     VERSION
+  # aks-nodepool1-36600731-vmss000000   Ready    agent   2m58s   v1.17.10
+
+  # Deploy our app 
+kubectl apply -f Kubernetes/
+
+# View the external ip address of our service
+kubectl get service/hello-world-service
+# NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     
+# hello-world-service   LoadBalancer   10.0.105.141   51.105.150.87   
+```
 
