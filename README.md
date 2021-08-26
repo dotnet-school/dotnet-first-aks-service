@@ -2,12 +2,29 @@
 
 - [x] Create a service
 - [x] Dockerize service
-- [ ] 
-- [ ] Publish image to docker registry
+- [x] Publish image to docker registry
 - [ ] Create a kubernetes manifest
+- [ ] Create script in poweshell 
 - [ ] Help on creating accounts
   - [ ] Instructions to create docker hub account
   - [ ] Instructions on creating azure account
+- [ ] Read more sub documents
+  - [ ] Defining a docker file 
+    - [ ] layers
+    - [ ] base images
+    - [ ] stages
+  - [ ] Kubernetes configuration
+    - [ ] What is a manifest ?
+    - [ ] kubernetes apply
+    - [ ] Pod
+    - [ ] Service
+      - [ ] ingress
+    - [ ] Deployment
+    - [ ] Load balancer
+  - [ ] Docker registry
+    - [ ] what is a registry
+    - [ ] why we need it 
+    - [ ] why we made it public
 - [ ] Create sub document to explain in details
   - [ ] creating a docker file
   - [ ] docker registry
@@ -80,6 +97,8 @@ In this article we focus on just creating a simple web service. There is another
 - ***[Publish Service on Docker Registry](#publish-to-docker-registry )***
 
   > Publish the image on docker registry so that it can be downloaded inside Azure Kubertes cluster.
+  
+- ***[Create Kubernetes Manifest](#create-kubernetes-manifest)***
 
 
 
@@ -224,4 +243,56 @@ By default, the image is marked as private. We don't want to setup authenticatio
 **Steps to make your image public:** 
 
 <img src="docs/images/make-docker-image-public.gif" alt="image-20210826140351294" style="zoom:150%;" />
+
+
+
+<a name="create-kubernetes-manifest"></a>
+
+# Create Kubernetes Manifest
+
+Create a file `Kubernetes/hello-world-service.yml`to define manifest (say kubernetes configuration) for the service as follows : 
+
+```yaml
+# Kubernetes/hello-world-service.yml
+
+# This part creates a load balancer pod that receives traffic from internet and load-balances to different instances of our service
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world-service
+spec:
+  selector:
+    app: hello-world     # This makes load balancer point to hello-world deployment
+  ports:
+    - port: 80
+      targetPort: 80  # The port our container(in pods) listens to
+  type: LoadBalancer
+---
+
+
+# This part creates defines which docker image to use for creating instances of our service and how many instances to create
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world
+spec:
+  
+  replicas: 2   # Run two instances of our service
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+        - name: hello-world
+          image: docker.io/nishants/hello-world-service:v1  # Our docker image on docker hub
+          ports:
+            - containerPort: 80           # Port that our app listens to
+          imagePullPolicy: Always
+```
+
+
 

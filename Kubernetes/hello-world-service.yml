@@ -1,0 +1,39 @@
+# Kubernetes/hello-world-service.yml
+
+# This part creates a load balancer pod that receives traffic from internet and load-balances to different instances of our service
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world-service
+spec:
+  selector:
+    app: hello-world     # This makes load balancer point to hello-world deployment
+  ports:
+    - port: 80
+      targetPort: 80  # The port our container(in pods) listens to
+  type: LoadBalancer
+---
+
+
+# This part creates defines which docker image to use for creating instances of our service and how many instances to create
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world
+spec:
+  
+  replicas: 2   # Run two instances of our service
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+        - name: hello-world
+          image: docker.io/nishants/hello-world-service:v1  # Our docker image on docker hub
+          ports:
+            - containerPort: 80           # Port that our app listens to
+          imagePullPolicy: Always
