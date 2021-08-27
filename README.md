@@ -1,3 +1,5 @@
+# Creating .NET5 service and Deploying to AKS
+
 This article will help you setup your first service on AKS. It does not intend to provide an in-depth knowledge on the tech-stack. Idea is, that once you have it working you can play around, experiment, explore and enhance to learn the concepts in depth or to create a prototype.
 
 We will create a simple service and talk about basics of docker and kubernetes. You need ***no prior experience with Docker/Kubernetes or Azure for this.***
@@ -22,7 +24,7 @@ In this article we focus on just creating a simple web service. There is another
 
 - **Docker Desktop** 
 
-  > To build and publish images to docker repository. 
+  > To build and publish images to docker registry. 
   >
   > Download and install from https://www.docker.com/products/docker-desktop.
 
@@ -80,8 +82,6 @@ In this article we focus on just creating a simple web service. There is another
 
 
 
-
-
 <a name="create-first-service"></a>
 
 # Create a service
@@ -89,9 +89,14 @@ In this article we focus on just creating a simple web service. There is another
 You can create the service using visual studio. Please ensure you keep the folder strucutre as below : 
 
 - <repository>
+  
   - HelloWorldService
-    - HelloWorldService.csproj
+    - `HelloWorldService.csproj`
     
+  - Kubernetes
+  
+    - `hello-world-service.yml`
+  
     
 
 For this article we will use the CLI to create a new service.
@@ -130,9 +135,9 @@ A dockerfile describes how to run a program as a docker container.
 Create a file `dotnet-first-aks-service/HelloWorldService/Dockerfile` as follows : 
 
 ```dockerfile
-# HelloWorldService/Dockerfile
+#HelloWorldService/Dockerfile
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /source
 
 COPY ./*.csproj .
@@ -141,7 +146,7 @@ RUN dotnet restore
 COPY . .
 RUN dotnet publish -c release -o /app --no-restore
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app
 
 COPY --from=build /app .
@@ -254,7 +259,6 @@ kind: Deployment
 metadata:
   name: hello-world
 spec:
-  
   replicas: 2   # Run two instances of our service
   selector:
     matchLabels:
@@ -271,6 +275,8 @@ spec:
             - containerPort: 80           # Port that our app listens to
           imagePullPolicy: Always
 ```
+
+- Please rememer to update the username in docker image name `docker.io/<your-dockerhub-username>/hello-world-service:v1`
 
 [Read more ](./docs/Kubernetes.md)
 
@@ -301,12 +307,12 @@ az aks get-credentials \
 --resource-group $RESOURCE_GROUP \
 --name $CLUSTER_NAME
 
-  # Check if our node is up and running
+# Check if our node is up and running
 kubectl get nodes
-  # NAME                                STATUS   ROLES   AGE     VERSION
-  # aks-nodepool1-36600731-vmss000000   Ready    agent   2m58s   v1.17.10
+# NAME                                STATUS   ROLES   AGE     VERSION
+# aks-nodepool1-36600731-vmss000000   Ready    agent   2m58s   v1.17.10
 
-  # Deploy our app 
+# Deploy our app 
 kubectl apply -f Kubernetes/
 
 # View the external ip address of our service
@@ -314,6 +320,8 @@ kubectl get service/hello-world-service
 # NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     
 # hello-world-service   LoadBalancer   10.0.105.141   51.105.150.87   
 ```
+
+You url will look like this http://51.105.150.87/WeatherForecast
 
 
 
